@@ -11,6 +11,6 @@ public class SubjectRequest {
     private Integer id;
     private String name;
     private String code;
-    private Integer divisionId;
+    private String divisionCode;
     private Boolean enable;
 }

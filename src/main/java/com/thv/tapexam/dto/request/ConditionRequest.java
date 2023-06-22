@@ -9,8 +9,9 @@ import lombok.*;
 @Builder
 public class ConditionRequest {
     private Integer id;
+    private String name;
     private String code;
-    private Integer divisionId;
+    private String divisionCode;
     private Integer divisionPoint;
     private Integer totalPoint;
     private Boolean enable;

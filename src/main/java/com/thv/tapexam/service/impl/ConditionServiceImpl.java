@@ -37,19 +37,22 @@ public class ConditionServiceImpl implements ConditionService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Boolean addCondition(ConditionRequest conditionRequest) throws Exception {
-        Optional<Condition> conditionOptional = conditionRepository.findByCode(conditionRequest.getCode());
+        Optional<Condition> conditionOptional = conditionRepository.findByName(conditionRequest.getName());
         if (!conditionOptional.isEmpty()) {
             throw new TapException(ErrorCode.CONDITION_NOT_FOUND);
         }
-        if (StringUtils.isEmpty(conditionRequest.getCode()) || conditionRequest.getDivisionId() == null) {
+        if (StringUtils.isEmpty(conditionRequest.getName())
+                || StringUtils.isEmpty(conditionRequest.getCode())
+                || StringUtils.isEmpty(conditionRequest.getDivisionCode())) {
             throw new TapException(ErrorCode.BAD_REQUEST);
         }
         Condition condition = Condition.builder()
+                .name(conditionRequest.getName())
                 .code(conditionRequest.getCode())
-                .divisionId(conditionRequest.getDivisionId())
+                .divisionCode(conditionRequest.getDivisionCode())
                 .divisionPoint(conditionRequest.getDivisionPoint())
                 .totalPoint(conditionRequest.getTotalPoint())
-                .enable(conditionRequest.getEnable())
+                .enable(conditionRequest.getEnable() != null ? conditionRequest.getEnable() : Boolean.TRUE)
                 .build();
         conditionRepository.save(condition);
         return Boolean.TRUE;
@@ -62,26 +65,29 @@ public class ConditionServiceImpl implements ConditionService {
         if (!conditionOptional.isPresent()) {
             throw new TapException(ErrorCode.CONDITION_NOT_FOUND);
         }
-        if (StringUtils.isEmpty(conditionRequest.getCode()) || conditionRequest.getDivisionId() == null) {
+        if (StringUtils.isEmpty(conditionRequest.getName())
+                || StringUtils.isEmpty(conditionRequest.getCode())
+                || StringUtils.isEmpty(conditionRequest.getDivisionCode())) {
             throw new TapException(ErrorCode.BAD_REQUEST);
         }
-        if (checkExistedOther(conditionId, conditionRequest.getCode(), conditionRequest.getDivisionId())) {
+        if (checkExistedOther(conditionId, conditionRequest.getName(), conditionRequest.getCode(), conditionRequest.getDivisionCode())) {
             throw new TapException(ErrorCode.CONDITION_CODE_EXISTED_OTHER);
         }
         Condition condition = Condition.builder()
                 .id(conditionId)
+                .name(conditionRequest.getName())
                 .code(conditionRequest.getCode())
-                .divisionId(conditionRequest.getDivisionId())
+                .divisionCode(conditionRequest.getDivisionCode())
                 .divisionPoint(conditionRequest.getDivisionPoint())
                 .totalPoint(conditionRequest.getTotalPoint())
-                .enable(conditionRequest.getEnable())
+                .enable(conditionRequest.getEnable() != null ? conditionRequest.getEnable() : Boolean.TRUE)
                 .build();
         conditionRepository.save(condition);
         return Boolean.TRUE;
     }
 
-    Boolean checkExistedOther(Integer id, String code, Integer divisionId) {
-        return conditionRepository.checkExistedOther(id, code, divisionId);
+    Boolean checkExistedOther(Integer id, String name, String code, String divisionCode) {
+        return conditionRepository.checkExistedOther(id, name, code, divisionCode);
     }
 
     @Override

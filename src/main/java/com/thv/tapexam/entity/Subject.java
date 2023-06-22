@@ -26,8 +26,8 @@ public class Subject {
     @Column(name = "code", nullable = false, unique = true)
     private String code;
 
-    @Column(name = "division_id", nullable = false)
-    private Integer divisionId;
+    @Column(name = "division_code")
+    private String divisionCode;
 
     @Column(name = "enable", columnDefinition = "boolean default true")
     private Boolean enable;

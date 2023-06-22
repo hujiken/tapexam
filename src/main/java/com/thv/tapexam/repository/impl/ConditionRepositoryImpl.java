@@ -15,12 +15,13 @@ public class ConditionRepositoryImpl implements ConditionRepositoryCustom {
     private EntityManager entityManager;
 
     @Override
-    public Boolean checkExistedOther(Integer id, String code, Integer divisionId) {
-        String sql = "SELECT id FROM conditions WHERE id <> :id AND (code = :code OR division_id = :divisionId)";
+    public Boolean checkExistedOther(Integer id, String name, String code, String divisionCode) {
+        String sql = "SELECT id FROM conditions WHERE id <> :id AND (name = :name OR code = :code OR division_code = :divisionCode)";
         Query query = entityManager.createNativeQuery(sql);
         query.setParameter("id", id);
+        query.setParameter("name", name);
         query.setParameter("code", code);
-        query.setParameter("divisionId", divisionId);
+        query.setParameter("divisionCode", divisionCode);
         List listId = query.getResultList();
         return listId.size() > 0 ? Boolean.TRUE : Boolean.FALSE;
     }

@@ -20,11 +20,14 @@ public class Condition {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(name = "name", nullable = false, unique = true)
+    private String name;
+
     @Column(name = "code", nullable = false, unique = true)
     private String code;
 
-    @Column(name = "division_id", nullable = false, unique = true)
-    private Integer divisionId;
+    @Column(name = "division_code", nullable = false, unique = true)
+    private String divisionCode;
 
     @Column(name = "division_point")
     private Integer divisionPoint;

@@ -7,6 +7,7 @@ import com.thv.tapexam.exception.TapException;
 import com.thv.tapexam.repository.base.SubjectRepository;
 import com.thv.tapexam.service.base.SubjectService;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,7 +48,8 @@ public class SubjectServiceImpl implements SubjectService {
         Subject subject = Subject.builder()
                 .name(subjectRequest.getName())
                 .code(subjectRequest.getCode())
-                .enable(subjectRequest.getEnable())
+                .divisionCode(subjectRequest.getDivisionCode())
+                .enable(subjectRequest.getEnable() != null ? subjectRequest.getEnable() : Boolean.TRUE)
                 .build();
         subjectRepository.save(subject);
         return Boolean.TRUE;
@@ -70,7 +72,8 @@ public class SubjectServiceImpl implements SubjectService {
                 .id(subjectId)
                 .name(subjectRequest.getName())
                 .code(subjectRequest.getCode())
-                .enable(subjectRequest.getEnable())
+                .divisionCode(subjectRequest.getDivisionCode())
+                .enable(subjectRequest.getEnable() != null ? subjectRequest.getEnable() : Boolean.TRUE)
                 .build();
         subjectRepository.save(subject);
         return Boolean.TRUE;
